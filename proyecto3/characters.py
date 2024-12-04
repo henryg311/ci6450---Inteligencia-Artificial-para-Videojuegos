@@ -195,34 +195,28 @@ class PathFindingCharacter:
                 return True
         return False
     
-    def calcular_ruta_tactica(self, paredes, tactical_points):
+    def calcular_ruta_tactica(self, paredes, tactical_points, disadvantageous_points):
         if self.target_index >= len(self.path):
             self.target_index = 0
 
         start = (self.x // GRID_SIZE * GRID_SIZE, self.y // GRID_SIZE * GRID_SIZE)
         end = (self.path[self.target_index][0] // GRID_SIZE * GRID_SIZE, self.path[self.target_index][1] // GRID_SIZE * GRID_SIZE)
 
-        # Inicializar la ruta táctica
         ruta_completa = []
         current_position = start
 
-        # Iterar sobre los puntos tácticos más cercanos al inicio y destino
         for tactical_point in sorted(
             tactical_points,
             key=lambda point: math.hypot(point[0] - current_position[0], point[1] - current_position[1])
         ):
-            # Agregar ruta hacia el punto táctico
             if math.hypot(current_position[0] - tactical_point[0], current_position[1] - tactical_point[1]) <= GRID_SIZE * 3:
-                sub_ruta = astar(current_position, tactical_point, paredes)
+                sub_ruta = astar(current_position, tactical_point, paredes, tactical_points, disadvantageous_points)
                 if sub_ruta:
                     ruta_completa += sub_ruta
                     current_position = tactical_point
 
-        # Finalmente, agregar la ruta al destino final
-        final_ruta = astar(current_position, end, paredes)
+        final_ruta = astar(current_position, end, paredes, tactical_points, disadvantageous_points)
         ruta_completa += final_ruta
-
-        # Asignar la ruta táctica calculada
         self.ruta_tactica = ruta_completa
 
     def dibujar(self, screen):

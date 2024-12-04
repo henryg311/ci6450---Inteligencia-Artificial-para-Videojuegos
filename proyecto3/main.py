@@ -3,7 +3,7 @@ import math
 from settings import WIDTH, HEIGHT, WHITE, GRID_SIZE, RED
 from map_elements import walls, draw_map, nodos
 from characters import PlayerCharacter, PathFindingCharacter, StaticAlignCharacter, EvasiveExplorerCharacter
-from map_elements import tactical_points_advantageous
+from map_elements import tactical_points_advantageous, tactical_points_disadvantageous
 
 # Inicialización de Pygame
 pygame.init()
@@ -107,7 +107,7 @@ while running:
             path_finder.velocidad =  3.5
 
         # Calcular ruta táctica antes de dibujar
-        path_finder.calcular_ruta_tactica(walls, tactical_points_advantageous)
+        path_finder.calcular_ruta_tactica(walls, tactical_points_advantageous, tactical_points_disadvantageous)
 
         # Dibujar todo
         draw_map(screen, PISO_SPRITE, PARED_SPRITE)
